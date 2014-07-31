@@ -6,8 +6,8 @@ if [[ ! -e apps/core ]]; then
   git clone git@github.com:roqua/core.git apps/core
 fi
 
-if [[ ! -e apps/roqua ]]; then
-  git clone git@github.com:roqua/roqua.git apps/roqua
+if [[ ! -e apps/rom ]]; then
+  git clone git@github.com:roqua/roqua.git apps/rom
 fi
 
 if [[ ! -e apps/grip ]]; then

@@ -54,7 +54,7 @@ pushd $ROOT > /dev/null
   (mongod --dbpath 'tmp/mongodb' --port '5545'                     || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mongodb]     \x1b[0m/" &
   (mailcatcher -fv                                                 || kill $$)  2>&1| perl -pe "s/^/\x1b[0;36m[mailcatcher] \x1b[0m/" &
 
-  (cd apps/roqua && bundle exec rails server                       || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[roqua]       \x1b[0m/" &
+  (cd apps/rom && bundle exec rails server                         || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[roqua]       \x1b[0m/" &
 
   wait
 popd > /dev/null
