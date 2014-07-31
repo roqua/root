@@ -1,4 +1,5 @@
 apps/*
+data/*
 docs/*
 libs/*
 ops/*
