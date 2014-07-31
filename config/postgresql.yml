@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  database: <%= ENV['POSTGRES_DATABASE'] || 'roqua_core' %>_development
+  username: <%= ENV['POSTGRES_USERNAME'] || ENV['USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || '' %>
+  encoding: utf8
+  host: localhost
+  port: 5544
+
+test:
+  adapter: postgresql
+  database: ${app}_test
+  username: <%= ENV['POSTGRES_USERNAME'] || ENV['USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || '' %>
+  encoding: utf8
+  host: localhost
+  port: 5544

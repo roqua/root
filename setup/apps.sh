@@ -6,6 +6,10 @@ function renderTemplate() {
 
 pushd $ROOT > /dev/null
   app="rom"
-  renderTemplate ./config/database.yml > apps/roqua/config/database.yml
+  renderTemplate ./config/mysql.yml > apps/roqua/config/database.yml
   renderTemplate ./config/mongoid.yml > apps/roqua/config/mongoid.yml
+
+  app="core"
+  renderTemplate ./config/postgresql.yml > apps/core/config/database.yml
+
 popd > /dev/null
