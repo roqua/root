@@ -1,0 +1,17 @@
+---
+development:
+  adapter: mysql2
+  database: ${app}_development
+  username: root
+  password:
+  encoding: utf8
+  host: localhost
+  port: 5543
+test: &1
+  adapter: mysql2
+  database: ${app}_test
+  username: root
+  password:
+  encoding: utf8
+  host: localhost
+production: *1

@@ -1,0 +1,34 @@
+---
+development:
+  sessions:
+    default:
+      :hosts:
+      - localhost:5545
+      :database: ${app}_development
+      :options: &1
+        :read: :primary
+        :write:
+          :w: 1
+    patty:
+      :hosts:
+      - localhost:5545
+      :database: ${app}_patty_development
+      :options: *1
+test:
+  sessions:
+    default:
+      hosts:
+      - localhost:5545
+      database: ${app}_test
+      options:
+        read: :primary
+        write:
+          w: 1
+    patty:
+      hosts:
+      - localhost:5545
+      database: ${app}_patty_test
+      options:
+        read: :primary
+        write:
+          w: 1

@@ -49,14 +49,12 @@ trap noop_func SIGINT SIGTERM INT QUIT TERM
 
 # Start services
 pushd $ROOT > /dev/null
-  mkdir -p tmp
+  (mysqld_safe --datadir="$ROOT/tmp/mysql" -P '5543'               || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mysql]       \x1b[0m/" &
+  (postgres -D 'tmp/postgres' -p '5544' -c 'synchronous_commit=off'|| kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[postgres]    \x1b[0m/" &
+  (mongod --dbpath 'tmp/mongodb' --port '5545'                     || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mongodb]     \x1b[0m/" &
+  (mailcatcher -fv                                                 || kill $$)  2>&1| perl -pe "s/^/\x1b[0;36m[mailcatcher] \x1b[0m/" &
 
-  # bin/ensure-postgres-socket-dir.sh
-
-  # . bin/kill-descendants-on-exit.sh
-
-  (mysqld --datadir="$ROOT/tmp/mysql" -P '5543'                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mysql] \x1b[0m/" &
-  (postgres -D 'tmp/postgres' -p '5544' -c 'synchronous_commit=off'|| kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[postgres] \x1b[0m/" &
+  (cd apps/roqua && bundle exec rails server                       || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[roqua]       \x1b[0m/" &
 
   wait
 popd > /dev/null

@@ -16,6 +16,7 @@ function ensureGem {
 }
 
 ensureGem git-up
+ensureGem mailcatcher
 
 ensureBrew pstree
 ensureBrew node
@@ -33,3 +34,7 @@ if [[ ! -d './tmp/postgres' ]]; then
   initdb './tmp/postgres' -E utf8 --locale en_US.utf8
 fi
 
+ensureBrew mongodb
+if [[ ! -d './tmp/mongodb' ]]; then
+  mkdir -p './tmp/mongodb'
+fi
