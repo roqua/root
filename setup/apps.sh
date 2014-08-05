@@ -11,7 +11,7 @@ pushd $ROOT > /dev/null
   sleep 3
 
     app="core"
-    renderTemplate ./config/postgresql.yml > apps/core/config/database.yml
+    renderTemplate ./setup/config/postgresql.yml > apps/core/config/database.yml
     pushd $ROOT/apps/core > /dev/null
       bundle check || bundle install
       bundle exec rake db:drop
@@ -20,8 +20,8 @@ pushd $ROOT > /dev/null
 
 
     app="rom"
-    renderTemplate ./config/mysql.yml > apps/rom/config/database.yml
-    renderTemplate ./config/mongoid.yml > apps/rom/config/mongoid.yml
+    renderTemplate ./setup/config/mysql.yml > apps/rom/config/database.yml
+    renderTemplate ./setup/config/mongoid.yml > apps/rom/config/mongoid.yml
     pushd $ROOT/apps/rom > /dev/null
       if [[ ! -e db/questionnaires ]]; then
         ln -s $ROOT/data/questionnaires db/questionnaires
@@ -34,7 +34,7 @@ pushd $ROOT > /dev/null
 
 
     app="grip"
-    renderTemplate ./config/postgresql.yml > apps/grip/config/database.yml
+    renderTemplate ./setup/config/postgresql.yml > apps/grip/config/database.yml
     pushd $ROOT/apps/grip > /dev/null
       bundle check || bundle install
       bundle exec rake db:drop
@@ -44,7 +44,7 @@ pushd $ROOT > /dev/null
 
 
     app="medoq"
-    renderTemplate ./config/postgresql.yml > apps/medoq/config/database.yml
+    renderTemplate ./setup/config/postgresql.yml > apps/medoq/config/database.yml
     pushd $ROOT/apps/medoq > /dev/null
       bundle check || bundle install
       bundle exec rake db:drop
@@ -54,7 +54,7 @@ pushd $ROOT > /dev/null
 
 
     app="quby_admin"
-    renderTemplate ./config/mongoid.yml > apps/quby_admin/config/mongoid.yml
+    renderTemplate ./setup/config/mongoid.yml > apps/quby_admin/config/mongoid.yml
     pushd $ROOT/apps/quby_admin > /dev/null
       if [[ ! -e db/questionnaires ]]; then
         ln -s $ROOT/data/questionnaires db/questionnaires
