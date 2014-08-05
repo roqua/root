@@ -7,8 +7,7 @@ function ensureBrew {
 
 function ensureGem {
   if gem list $1 -i > /dev/null; then
-    echo "Ruby gems: $1 already installed; updating..."
-    gem update $1
+    echo "Ruby gems: $1 already installed"
   else
     echo "Ruby gems: Installing $1..."
     gem install $1

@@ -1,9 +1,18 @@
 #!/usr/bin/env ruby
-
 ROOT=File.expand_path(File.join(__FILE__, '..'))
+
+if File.exist?(File.join(ROOT, 'tmp', 'start-dbs.pid'))
+  puts 'Already running...'
+  exit 1
+else
+  File.open(File.join(ROOT, 'tmp', 'start-dbs.pid'), 'w') do |f|
+    f.print Process.pid
+  end
+end
 
 PROCESSES=[]
 
+require 'fileutils'
 require 'open3'
 require 'rainbow/ext/string'
 
@@ -45,6 +54,8 @@ end
 
 at_exit do
   puts "Shutting down..."
+
+  FileUtils.rm('tmp/start-dbs.pid')
 
   PROCESSES.each do |process|
     puts "Stopping #{process.name}"

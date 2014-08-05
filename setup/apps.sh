@@ -14,7 +14,8 @@ pushd $ROOT > /dev/null
     renderTemplate ./config/postgresql.yml > apps/core/config/database.yml
     pushd $ROOT/apps/core > /dev/null
       bundle check || bundle install
-      bundle exec rake db:reset
+      bundle exec rake db:drop
+      bundle exec rake db:setup
     popd > /dev/null
 
 
@@ -26,7 +27,8 @@ pushd $ROOT > /dev/null
         ln -s $ROOT/data/questionnaires db/questionnaires
       fi
       bundle check || bundle install
-      bundle exec rake db:reset ORGANIZATION=demo
+      bundle exec rake db:drop
+      bundle exec rake db:setup ORGANIZATION=demo
       bundle exec rake test:prepare
     popd > /dev/null
 
@@ -35,7 +37,8 @@ pushd $ROOT > /dev/null
     renderTemplate ./config/postgresql.yml > apps/grip/config/database.yml
     pushd $ROOT/apps/grip > /dev/null
       bundle check || bundle install
-      bundle exec rake db:reset
+      bundle exec rake db:drop
+      bundle exec rake db:setup
       bundle exec rake test:prepare
     popd > /dev/null
 
@@ -44,7 +47,8 @@ pushd $ROOT > /dev/null
     renderTemplate ./config/postgresql.yml > apps/medoq/config/database.yml
     pushd $ROOT/apps/medoq > /dev/null
       bundle check || bundle install
-      bundle exec rake db:reset
+      bundle exec rake db:drop
+      bundle exec rake db:setup
       bundle exec rake test:prepare
     popd > /dev/null
 
