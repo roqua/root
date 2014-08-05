@@ -1,6 +1,6 @@
 development:
   adapter: postgresql
-  database: <%= ENV['POSTGRES_DATABASE'] || 'roqua_core' %>_development
+  database: <%= ENV['POSTGRES_DATABASE'] || '${app}' %>_development
   username: <%= ENV['POSTGRES_USERNAME'] || ENV['USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] || '' %>
   encoding: utf8

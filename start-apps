@@ -1,0 +1,131 @@
+#!/usr/bin/env ruby
+
+ROOT=File.expand_path(File.join(__FILE__, '..'))
+
+PROCESSES=[]
+
+require 'open3'
+require 'rainbow/ext/string'
+
+class SubProcess
+  attr_reader :name
+  attr_reader :command
+  attr_reader :env
+
+  attr_reader :stdin, :stdout, :stderr
+
+  def initialize(name, command, env = {})
+    @name    = name
+    @command = command
+    @env     = env
+  end
+
+  def start
+    @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(env, command)
+    @stdin.close
+    @pid = @wait_thr[:pid]
+  end
+
+  def stop
+    kill("TERM")
+    @wait_thr.value
+  end
+
+  def running?
+    @wait_thr && @wait_thr.alive?
+  rescue Errno::ESRCH
+    false
+  end
+
+  private
+
+  def kill(signal)
+    ::Process.kill(signal, @pid)
+  end
+end
+
+at_exit do
+  puts "Shutting down..."
+
+  PROCESSES.each do |process|
+    puts "Stopping #{process.name}"
+    if process.running?
+      process.stop
+      sleep 2
+      if process.running?
+        process.send(:kill, "KILL")
+      end
+    end
+  end
+end
+
+trap "SIGINT" do
+  exit
+end
+
+Dir.chdir(ROOT) do
+  PROCESSES << SubProcess.new(:core,        "apps/core/bin/rails server --port 3001")
+  PROCESSES << SubProcess.new(:rom,         "apps/rom/bin/rails server --port 3002")
+  PROCESSES << SubProcess.new(:grip,        "apps/grip/bin/rails server --port 3003")
+  # PROCESSES << SubProcess.new(:medoq,       "apps/medoq/bin/rails server --port 3001")
+  # PROCESSES << SubProcess.new(:quby_admin,  "apps/quby_admin/bin/rails server --port 3001")
+
+  PROCESSES.each do |process|
+    puts "Starting #{process.command}"
+    process.start
+  end
+end
+
+printer = Thread.new do
+  begin
+    loop do
+      io = IO.select(PROCESSES.map(&:stdout) + PROCESSES.map(&:stderr), nil, nil, 1)
+
+      if io.nil?
+        # nothing
+      else
+        io.first.each do |reader|
+          next if reader.eof?
+
+          process = PROCESSES.find { |process| process.stdout == reader || process.stderr == reader }
+          data = reader.gets
+          width = PROCESSES.map { |process| process.name.to_s.size }.max + 3
+
+          print "[#{process.name}] ".ljust(width).color(:magenta)
+          print data.strip
+          puts
+
+        end
+      end
+    end
+  rescue Exception => e
+    puts e.message
+    puts e.backtrace.inspect
+  end
+end
+
+printer.join
+
+# Start services
+
+# pushd #{ROOT} > /dev/null
+#   {
+#     mysqld --datadir="#{ROOT}/tmp/mysql" -P '5543' --socket="#{ROOT}/tmp/mysql.sock" || kill $$;
+#   } 2>&1| perl -pe "s/^/\x1b[0;35m[mysql]       \x1b[0m/" &
+#   # (postgres -D 'tmp/postgres' -p '5544' -c 'synchronous_commit=off'                  || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[postgres]    \x1b[0m/" &
+#   # (mongod --dbpath 'tmp/mongodb' --port '5545'                                       || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mongodb]     \x1b[0m/" &
+#   # (mailcatcher -fv                                                                   || kill $$)  2>&1| perl -pe "s/^/\x1b[0;36m[mailcatcher] \x1b[0m/" &
+
+#   # (cd apps/core       && bundle exec rails server --port 3001                       )  2>&1| perl -pe "s/^/\x1b[0;35m[core]        \x1b[0m/" &
+#   # (cd apps/rom        && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[rom]         \x1b[0m/" &
+#   # (cd apps/grip       && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[grip]        \x1b[0m/" &
+#   # (cd apps/medoq      && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[medoq]       \x1b[0m/" &
+#   # (cd apps/quby_admin && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[quby_admin]  \x1b[0m/" &
+#   # (cd apps/moodmapp   && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[moodmapp]    \x1b[0m/" &
+
+#   sleep 10
+#   echo $$
+#   echo $(pgrep -P $$)
+
+#   wait
+# popd > /dev/null

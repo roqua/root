@@ -26,7 +26,7 @@ ensureBrew mysql
 if [[ ! -d './tmp/mysql' ]]; then
   mkdir -p ./tmp/mysql
 
-  mysql_install_db --user=$USER --basedir=/usr/local --datadir=/Users/marten/rgoc/root/tmp/mysql
+  mysql_install_db --user=$USER --basedir=/usr/local/bin/mysql_install_db/../../ --datadir=$ROOT/tmp/mysql
 fi
 
 ensureBrew postgresql
