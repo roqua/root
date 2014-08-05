@@ -103,27 +103,3 @@ printer = Thread.new do
 end
 
 printer.join
-
-# Start services
-
-# pushd #{ROOT} > /dev/null
-#   {
-#     mysqld --datadir="#{ROOT}/tmp/mysql" -P '5543' --socket="#{ROOT}/tmp/mysql.sock" || kill $$;
-#   } 2>&1| perl -pe "s/^/\x1b[0;35m[mysql]       \x1b[0m/" &
-#   # (postgres -D 'tmp/postgres' -p '5544' -c 'synchronous_commit=off'                  || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[postgres]    \x1b[0m/" &
-#   # (mongod --dbpath 'tmp/mongodb' --port '5545'                                       || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[mongodb]     \x1b[0m/" &
-#   # (mailcatcher -fv                                                                   || kill $$)  2>&1| perl -pe "s/^/\x1b[0;36m[mailcatcher] \x1b[0m/" &
-
-#   # (cd apps/core       && bundle exec rails server --port 3001                       )  2>&1| perl -pe "s/^/\x1b[0;35m[core]        \x1b[0m/" &
-#   # (cd apps/rom        && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[rom]         \x1b[0m/" &
-#   # (cd apps/grip       && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[grip]        \x1b[0m/" &
-#   # (cd apps/medoq      && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[medoq]       \x1b[0m/" &
-#   # (cd apps/quby_admin && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[quby_admin]  \x1b[0m/" &
-#   # (cd apps/moodmapp   && bundle exec rails server                                    || kill $$)  2>&1| perl -pe "s/^/\x1b[0;35m[moodmapp]    \x1b[0m/" &
-
-#   sleep 10
-#   echo $$
-#   echo $(pgrep -P $$)
-
-#   wait
-# popd > /dev/null
