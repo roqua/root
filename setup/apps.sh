@@ -23,9 +23,7 @@ pushd $ROOT > /dev/null
     renderTemplate ./setup/config/mysql.yml > apps/rom/config/database.yml
     renderTemplate ./setup/config/mongoid.yml > apps/rom/config/mongoid.yml
     pushd $ROOT/apps/rom > /dev/null
-      if [[ ! -e db/questionnaires ]]; then
-        ln -s $ROOT/data/questionnaires db/questionnaires
-      fi
+      ln -sf $ROOT/data/questionnaires db/questionnaires
       bundle check || bundle install
       bundle exec rake db:drop
       bundle exec rake db:setup ORGANIZATION=demo
@@ -56,9 +54,7 @@ pushd $ROOT > /dev/null
     app="quby_admin"
     renderTemplate ./setup/config/mongoid.yml > apps/quby_admin/config/mongoid.yml
     pushd $ROOT/apps/quby_admin > /dev/null
-      if [[ ! -e db/questionnaires ]]; then
-        ln -s $ROOT/data/questionnaires db/questionnaires
-      fi
+      ln -sf $ROOT/data/questionnaires db/questionnaires
       bundle check || bundle install
     popd > /dev/null
 
